@@ -48,7 +48,7 @@ EditItinerary
                                         value="{{ $details->packagename }}" required>
                                     <label class="control-label-form">Departure</label>
                                     <input class="form-control form-control-lg" id="inputLarge" name="date" type="Date"
-                                        value="{{$details->date}}" required>
+                                        value="{{$details->date}}">
                                     <label class="control-label-form">Cost</label>
                                     <input class="form-control form-control-lg" id="cost" name="cost" type="text"
                                         placeholder="Cost" value="{{$details->cost}}" required>

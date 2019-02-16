@@ -1,7 +1,5 @@
 @extends('travel.layout.master')
-@section('title')
- -  {{ ucfirst(strtolower($Additinerary->packagename)) }}
-@endsection
+
 
 @section('content')
 <div class="home">
@@ -62,10 +60,12 @@
         <br>
 
         <div class=" h3"  >Our Plan</div>
+        @if(!empty(( $Additinerary->date )))
         <br>
         <span>
           <div class=" h4" ><span> <i class="fa fa-plane">&nbsp</i> Depature : <span style="color:red">{{ date("dS F Y", strtotime($Additinerary->date)) }} </span> </span> </div>
         </span>
+        @endif
         <br>
         <div class=" h4" ><span><i class="fa fa-money">&nbsp</i>Cost : <span style="color:red">INR {{ $Additinerary->cost }}</span></span> </div>
         <br>
@@ -92,19 +92,20 @@
 <br><br>
 <div class="row">
   @foreach($RandomDatas as $RandomData)
-  @if(!empty($RandomData->image->image_name))
-   <div class="col-lg-4 ">
-        <div class="container11" onclick="window.location.href = '{{ url('/package/'.@$RandomData->itineryData->id.'/'.@$RandomData->category->category) }}';">
-        <a href="{{ url('/package/'.@$RandomData->itineryData->id.'/'.@$RandomData->category->category) }}">
-        <img class="img-fluid c1" src="{{ url(@$RandomData->image->image_name) }}" alt="">
-        <div class="h">
-          <h3> {{ @$RandomData->category->category }}</h3>
-          <h3><small>{{ @$RandomData->type}}</small></h3>
+  {{ $RandomData->image }}
+      @if(!empty($RandomData->image->image_name))
+        <div class="col-lg-4 ">
+            <div class="container11" onclick="window.location.href = '{{ url('/package/'.@$RandomData->itineryData->id.'/'.@$RandomData->category->category) }}';">
+            <a href="{{ url('/package/'.@$RandomData->itineryData->id.'/'.@$RandomData->category->category) }}">
+            <img class="img-fluid c1" src="{{ url(@$RandomData->image->image_name) }}" alt="">
+            <div class="h">
+              <h3> {{ @$RandomData->itineryData->packagename }}</h3>
+              <h3><small>{{ @$RandomData->itineryData->cost}}</small></h3>
+            </div>
+            </a>
+          </div>
         </div>
-        </a>
-      </div>
-    </div>
-    @endif
+      @endif
   @endforeach
 </div>
     </section>

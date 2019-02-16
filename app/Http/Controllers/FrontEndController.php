@@ -6,10 +6,10 @@ use Illuminate\Http\Request;
 use App\Category;   
 use App\Additinerary; 
 use App\Image;
-use DB;
 use App\Complementaries;
 use App\Mail;
 use App\Multicategory;
+use Illuminate\Support\Facades\DB;
 
 class FrontEndController extends Controller
 {
@@ -79,28 +79,29 @@ class FrontEndController extends Controller
         
     }
 
-        public function getFilterData(Request $request){
+    public function getFilterData(Request $request){
         if(request('FilterType') == 'all'){
-            $Products = Multicategory::where([['category_id',request('catagoryId')]])->paginate(9);
+            $Products =  DB::table('multicategories')->where([['multicategories.category_id',request('catagoryId')]])->join('additineraries','multicategories.itinery_id','=','additineraries.id')->paginate(9);
         }else if(request('FilterType') != 'all'){
-            $Products = Multicategory::where([['category_id',request('catagoryId')]])->paginate(9);
+            $Products =  DB::table('multicategories')->where([['additineraries.type',request('FilterType')],['multicategories.category_id',request('catagoryId')]])->join('additineraries','multicategories.itinery_id','=','additineraries.id')->paginate(9);
         }
-
         $output = '';
-        if(!$Products->isEmpty()){
-          foreach($Products as $Product){
-            if (!empty($Product->image->image_name)) {
-                $output .= ' <div class="col-md-4 col-sm-6 col-xs-6 no-padding">
-                <div class="container11" onclick="window.location.href ='."'".url("/package/".$Product->itineryData->id .'/'.$Product->category->category)."'".'">'.'<a href ='."'".url("/package/".$Product->itineryData->id .'/'.$Product->category->category)."'".'>'.
-                '<img src="'.url($Product->image->image_name).'" alt="'.@$Product->highlights.'" class="image">
-                <div class="overlay1">'.
-                ' <p class="pric">'. @$Product->itineryData->packagename.'</p><h6 class="h7"> ₹ '.@$Product->itineryData->cost.'</h6>'.
-                '</div></a></div></div>';
+        if(!empty($Products)){
+            foreach ($Products as $key => $Product) {
+                if(!empty($Product)){                    
+                    $CatagoryData = Category::findOrfail($Product->category_id);
+                    $ProductImage= Image::where('additineraries_id',$Product->id)->first();
+                    $output .= ' <div class="col-md-4 col-sm-6 col-xs-6 no-padding">
+                    <div class="container11" onclick="window.location.href ='."'".url("/package/".$Product->id .'/'.$CatagoryData->category)."'".'">'.'<a href ='."'".url("/package/".$Product->id .'/'.$CatagoryData->category)."'".'>'.
+                    '<img src="'.url($ProductImage->image_name).'" alt="'.@$Product->highlights.'" class="image">
+                    <div class="overlay1">'.
+                    ' <p class="pric">'. @$Product->packagename.'</p><h6 class="h7"> ₹ '.@$Product->cost.'</h6>'.
+                    '</div></a></div></div>';
+                }
             }
-          }
          return $output; 
-        } 
+        } else{
+            return '';
+        }
     }
-
-
 }

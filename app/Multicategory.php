@@ -35,5 +35,9 @@ class Multicategory extends Model
     public function image(){
     	return $this->hasOne(Image::class,'id','itinery_id');
     }
+
+    public function Attributeimage(){
+    	return $this->hasOne(Image::class,'additineraries_id','id');
+    }
     
 }

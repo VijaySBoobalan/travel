@@ -152,7 +152,7 @@ class TravelController extends Controller
 
     public function itineraryupdate($id, Request $request ){ 
       $this->validate(request(),[
-            // 'category'=>'required',    
+            'category'=>'required',    
             'type'    =>'required',
             'trending'    =>'required',
             'packagename'   =>'required',
@@ -164,9 +164,6 @@ class TravelController extends Controller
             'highlights'=>'required',
             'overview'=>'required',
         ]);
-
-        // return request()->all();
-        
         $store = Additinerary::findOrfail($id);
         $store->type=request('type');
         $store->trending=request('trending');
@@ -184,11 +181,8 @@ class TravelController extends Controller
           $store->complementary=serialize(request('complementary'));
         }
         $store->save();
-
-
+        
         if(!empty(request('category'))){
-
-
           $Multicategories= Multicategory::where([['itinery_id',$store->id]])->get()->all();
             foreach ($Multicategories as $Multicategory){
                 if(!in_array($Multicategory->category_id, request('category'))){
@@ -203,7 +197,6 @@ class TravelController extends Controller
                     $multicategory->save();
                 }
           } 
-
         }else{
           $Multicategories= Multicategory::where([['itinery_id',$store->id]])->get()->all();
           foreach ($Multicategories as $Multicategory){
