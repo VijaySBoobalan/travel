@@ -92,12 +92,11 @@
 <br><br>
 <div class="row">
   @foreach($RandomDatas as $RandomData)
-  {{ $RandomData->image }}
-      @if(!empty($RandomData->image->image_name))
+      @if(!empty($RandomData->itineryData->image->image_name))
         <div class="col-lg-4 ">
             <div class="container11" onclick="window.location.href = '{{ url('/package/'.@$RandomData->itineryData->id.'/'.@$RandomData->category->category) }}';">
             <a href="{{ url('/package/'.@$RandomData->itineryData->id.'/'.@$RandomData->category->category) }}">
-            <img class="img-fluid c1" src="{{ url(@$RandomData->image->image_name) }}" alt="">
+            <img class="img-fluid c1" src="{{ url(@$RandomData->itineryData->image->image_name) }}" alt="">
             <div class="h">
               <h3> {{ @$RandomData->itineryData->packagename }}</h3>
               <h3><small>{{ @$RandomData->itineryData->cost}}</small></h3>
